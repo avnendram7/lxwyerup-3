@@ -55,12 +55,16 @@ function logout() {
 }
 
 /* Check if already logged in */
-if (sessionStorage.getItem('adminToken')) {
-  authenticated = true;
-  document.getElementById('loginGate').style.display = 'none';
-  document.getElementById('adminWrap').style.display = 'flex';
-  loadData();
-}
+document.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('adminToken')) {
+    authenticated = true;
+    document.getElementById('loginGate').style.display = 'none';
+    document.getElementById('adminWrap').style.display = 'flex';
+    if (typeof window.loadData === 'function') {
+      window.loadData();
+    }
+  }
+});
 
 /* ─── View switching ────────────────────────────────────── */
 window.switchView = function(viewId, btn) {
