@@ -411,6 +411,7 @@ app.post('/api/signup', async (req, res) => {
     painPoint: painPoint?.trim() || '',
     signupDate: new Date().toISOString(),
     status: 'pending',
+    isDemo: false,
   };
 
   await insertSignup(newUser);
@@ -483,6 +484,62 @@ app.get('/api/referral/:code', async (req, res) => {
   res.json({ success: true, referralCount: count, memberNumber: user.memberNumber, name: user.name });
 });
 
+// Cron job to insert 2 dummy Indian lawyers daily
+app.get('/api/cron/daily-dummy', async (req, res) => {
+  try {
+    const total = await countSignups();
+    if (total >= MAX_SIGNUPS) {
+      return res.status(200).json({ success: true, message: 'All spots taken, no dummies added.' });
+    }
+
+    const INDIAN_LAWYERS = [
+      { name: "Adv. Rahul Sharma", city: "New Delhi", state: "Delhi", practiceArea: "corporate", caseVolume: "11-50" },
+      { name: "Adv. Priya Desai", city: "Mumbai", state: "Maharashtra", practiceArea: "civil", caseVolume: "1-10" },
+      { name: "Adv. Arjun Reddy", city: "Hyderabad", state: "Telangana", practiceArea: "criminal", caseVolume: "51-200" },
+      { name: "Adv. Neha Gupta", city: "Pune", state: "Maharashtra", practiceArea: "family", caseVolume: "11-50" },
+      { name: "Adv. Siddharth Iyer", city: "Chennai", state: "Tamil Nadu", practiceArea: "intellectual_property", caseVolume: "11-50" },
+      { name: "Adv. Ananya Patel", city: "Ahmedabad", state: "Gujarat", practiceArea: "corporate", caseVolume: "51-200" },
+      { name: "Adv. Rohan Mehra", city: "Chandigarh", state: "Punjab", practiceArea: "criminal", caseVolume: "1-10" }
+    ];
+
+    const pick1 = INDIAN_LAWYERS[Math.floor(Math.random() * INDIAN_LAWYERS.length)];
+    const pick2 = INDIAN_LAWYERS[Math.floor(Math.random() * INDIAN_LAWYERS.length)];
+    const toInsert = [pick1, pick2];
+    
+    let currentTotal = total;
+    for (const lawyer of toInsert) {
+      if (currentTotal >= MAX_SIGNUPS) break;
+      const memberNumber = String(currentTotal + 1).padStart(3, '0');
+      const referralCode = generateReferralCode(lawyer.name);
+      
+      const newUser = {
+        id: uuidv4(),
+        memberNumber,
+        referralCode,
+        referredBy: null,
+        name: lawyer.name,
+        email: `demo-${uuidv4().substring(0,6)}@lxwyerup.test`,
+        state: lawyer.state,
+        city: lawyer.city,
+        pincode: '',
+        practiceArea: lawyer.practiceArea,
+        caseVolume: lawyer.caseVolume,
+        painPoint: 'Demo user added by cron',
+        signupDate: new Date().toISOString(),
+        status: 'pending',
+        isDemo: true,
+      };
+      await insertSignup(newUser);
+      currentTotal++;
+    }
+
+    res.json({ success: true, message: `Added dummy users.` });
+  } catch (err) {
+    console.error('Cron error:', err);
+    res.status(500).json({ success: false, message: 'Cron failed' });
+  }
+});
+
 // Public: social proof data (recent signups, city breakdown)
 app.get('/api/social-proof', async (req, res) => {
   const total = await countSignups();
@@ -537,7 +594,7 @@ app.post('/api/admin/approve/:id', requireAdmin, async (req, res) => {
   const host = req.hostname;
   const isLocalhost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
 
-  if (!isLocalhost) {
+  if (!isLocalhost && !user.isDemo) {
     const mailer = getTransporter();
     if (mailer) {
       try {
@@ -548,7 +605,7 @@ app.post('/api/admin/approve/:id', requireAdmin, async (req, res) => {
       }
     }
   } else {
-    console.log(`🚫 Skipped welcome email to ${user.email} (running on localhost)`);
+    console.log(`🚫 Skipped welcome email to ${user.email} (localhost or demo user)`);
   }
 
   res.json({ success: true, message: `${user.name} approved.` });

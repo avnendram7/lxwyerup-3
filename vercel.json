@@ -18,5 +18,11 @@
       "source": "/admin",
       "destination": "/server.js"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/daily-dummy",
+      "schedule": "0 0 * * *"
+    }
   ]
 }

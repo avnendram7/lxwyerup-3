@@ -99,10 +99,10 @@ window.loadData = async function() {
       try { renderRecentTable(); } catch(e) { console.error('Recent table error:', e); }
       try { renderFullTable(); } catch(e) { console.error('Full table error:', e); }
     } else {
-      document.getElementById('recentTableBody').innerHTML = `<tr><td colspan="6">Server error: ${res.status}</td></tr>`;
+      document.getElementById('recentTableBody').innerHTML = `<tr><td colspan="7">Server error: ${res.status}</td></tr>`;
     }
   } catch (err) {
-    document.getElementById('recentTableBody').innerHTML = `<tr><td colspan="6">Fetch error: ${err.message}</td></tr>`;
+    document.getElementById('recentTableBody').innerHTML = `<tr><td colspan="7">Fetch error: ${err.message}</td></tr>`;
     console.error('loadData error:', err);
     // Mock data fallback removed so we can see actual errors if they occur
   }
@@ -171,7 +171,7 @@ function renderRecentTable() {
   const recent = [...allUsers].sort((a, b) => new Date(b.signupDate) - new Date(a.signupDate)).slice(0, 5);
 
   if (recent.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" class="table-empty">No signups yet.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="table-empty">No signups yet.</td></tr>';
     return;
   }
 
@@ -182,6 +182,9 @@ function renderRecentTable() {
       <td class="cell-email">${escHtml(u.email)}</td>
       <td>${escHtml(u.state || '')}${u.state && u.city ? ' / ' : ''}${escHtml(u.city || '—')}</td>
       <td>${escHtml(u.caseVolume || '—')}</td>
+      <td>
+        ${u.isDemo ? '<span style="background:rgba(255,255,255,0.1);color:#fff;padding:2px 6px;border-radius:4px;font-size:11px;">Demo</span>' : '<span style="background:rgba(16,185,129,0.2);color:#10b981;padding:2px 6px;border-radius:4px;font-size:11px;">Real</span>'}
+      </td>
       <td>${statusPill(u.status)}</td>
       <td>
         <div class="action-btns">
@@ -203,7 +206,7 @@ function renderFullTable(users) {
   filteredUsers = list;
 
   if (list.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="12" class="table-empty">No results found.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="13" class="table-empty">No results found.</td></tr>';
     return;
   }
 
@@ -226,6 +229,9 @@ function renderFullTable(users) {
         </div>
       </td>
       <td class="cell-date">${formatDate(u.signupDate)}</td>
+      <td>
+        ${u.isDemo ? '<span style="background:rgba(255,255,255,0.1);color:#fff;padding:2px 6px;border-radius:4px;font-size:11px;">Demo</span>' : '<span style="background:rgba(16,185,129,0.2);color:#10b981;padding:2px 6px;border-radius:4px;font-size:11px;">Real</span>'}
+      </td>
       <td>${statusPill(u.status)}</td>
       <td>
         <div class="action-btns">
