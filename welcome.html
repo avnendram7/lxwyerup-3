@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome, Founding Member — Lxwyer Up | You're In!</title>
+  <meta name="description" content="You're now a Founding Member of Lxwyer Up — India's first AI-native litigation workspace. Share your unique link to unlock priority access and exclusive rewards." />
+  <!-- Private page: don't index -->
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- OG for social sharing (referral shares point here) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://lxwyerup.com/welcome.html" />
+  <meta property="og:title" content="I just joined Lxwyer Up as a Founding Member! 🏛️" />
+  <meta property="og:description" content="Be one of only 500 lawyers helping build India's first AI Legal Operating System. Practice Law. Not Chaos." />
+  <meta property="og:image" content="https://lxwyerup.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="en_IN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="I joined Lxwyer Up as a Founding Member!" />
+  <meta name="twitter:description" content="India's first AI-native litigation workspace for lawyers. 500 founding spots. Practice Law. Not Chaos." />
+  <meta name="twitter:image" content="https://lxwyerup.com/og-image.png" />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="apple-touch-icon" href="logo.png" />
+  <meta name="theme-color" content="#000000" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="welcome.css" />
+</head>
+<body>
+
+  <!-- Canvas for minimal celebration -->
+  <canvas id="celebrationCanvas"></canvas>
+
+  <!-- Noise overlay -->
+  <div class="noise-overlay"></div>
+
+  <!-- Subtle mesh gradient background -->
+  <div class="mesh-bg"></div>
+
+  <div class="welcome-container" id="welcomePage">
+    
+    <!-- Top Nav / Logo -->
+    <header class="welcome-header reveal-seq" data-seq="0">
+      <img src="logo.png" alt="Lxwyer Up Logo" class="welcome-logo" />
+      <span class="welcome-brand">Lxwyer Up</span>
+    </header>
+
+    <!-- Main Card (Glassmorphism) -->
+    <main class="welcome-card reveal-seq" data-seq="1">
+      
+      <!-- Founding Badge Minimal -->
+      <div class="badge-minimal">
+        <div class="badge-icon">✦</div>
+        <div class="badge-text">Founding Member</div>
+        <div class="badge-number" id="memberNumberDisplay">#001</div>
+      </div>
+
+      <h1 class="welcome-title">
+        Welcome to the <span class="title-gold">future</span> of legal practice.
+      </h1>
+
+      <p class="welcome-message">
+        You are now one of the first lawyers helping build India's Legal Operating System.
+        <br/><strong id="welcomeNameEl" class="welcome-name-strong">Welcome, Advocate.</strong>
+      </p>
+
+      <div class="status-box">
+        <div class="status-indicator pending"></div>
+        <div class="status-details">
+          <span class="status-label">Application Status</span>
+          <span class="status-value">Under Review</span>
+        </div>
+      </div>
+
+      <div class="email-note" id="emailNoteEl">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        <span>Confirmation sent to your email.</span>
+      </div>
+      
+    </main>
+
+    <!-- Viral Referral System -->
+    <section class="referral-section reveal-seq" data-seq="2">
+      <h3 class="section-title">Jump the queue. Unlock rewards.</h3>
+      <p class="referral-desc">Invite your peers to secure priority access and lifetime benefits.</p>
+      
+      <div class="referral-link-box">
+        <input type="text" id="refLinkInput" readonly value="Loading link..." />
+        <button id="copyRefBtn" class="btn-copy">Copy</button>
+      </div>
+      
+      <div class="referral-progress">
+        <div class="progress-stats">
+          <span class="referred-count"><strong id="refCount">0</strong> friends joined</span>
+          <span class="next-reward">Next: Priority Badge</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="refProgress" style="width: 0%;"></div>
+        </div>
+      </div>
+      
+      <div class="reward-tiers">
+        <div class="reward-tier" data-tier="3">
+          <span class="tier-req">3 Invites</span>
+          <span class="tier-reward">Priority Access</span>
+        </div>
+        <div class="reward-tier" data-tier="5">
+          <span class="tier-req">5 Invites</span>
+          <span class="tier-reward">Founding Badge</span>
+        </div>
+        <div class="reward-tier" data-tier="10">
+          <span class="tier-req">10 Invites</span>
+          <span class="tier-reward">Lifetime Discount</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Share -->
+    <footer class="welcome-footer reveal-seq" data-seq="3">
+      <p class="share-text">Or share directly:</p>
+      <div class="share-actions">
+        <button class="btn-share whatsapp" onclick="shareWhatsApp()">
+           WhatsApp
+        </button>
+        <button class="btn-share linkedin" onclick="shareLinkedIn()">
+           LinkedIn
+        </button>
+      </div>
+      <a href="index.html" class="back-link">← Back to Home</a>
+    </footer>
+
+  </div>
+
+  <script src="welcome.js"></script>
+</body>
+</html>

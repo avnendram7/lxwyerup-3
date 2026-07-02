@@ -1,0 +1,5 @@
+node_modules/
+data/signups.json
+.env
+check_console.js
+*.log

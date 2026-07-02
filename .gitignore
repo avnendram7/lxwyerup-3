@@ -1,0 +1,9 @@
+.vercel
+.env*
+node_modules/
+data/
+*.log
+test-*.js
+test_*.js
+check_*.js
+gen_*.js

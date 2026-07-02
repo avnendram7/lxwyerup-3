@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lxwyer Up — Admin Dashboard</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <!-- ═══ LOGIN GATE ═══════════════════════════════════════ -->
+  <div class="login-gate" id="loginGate">
+    <div class="login-card">
+      <img src="logo.png" alt="Lxwyer Up" class="login-logo" />
+      <h1 class="login-title">Admin Access</h1>
+      <p class="login-sub">Lxwyer Up — Private Dashboard</p>
+      <form id="loginForm" class="login-form">
+        <div class="login-field">
+          <label class="login-label">Password</label>
+          <input
+            type="password"
+            id="adminPassword"
+            class="login-input"
+            placeholder="Enter admin password"
+            autocomplete="current-password"
+          />
+        </div>
+        <div class="login-error" id="loginError"></div>
+        <button type="submit" class="login-btn">
+          Unlock Dashboard
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </button>
+      </form>
+      <div class="login-note">This page is private. Do not share access.</div>
+    </div>
+  </div>
+
+  <!-- ═══ ADMIN DASHBOARD ══════════════════════════════════ -->
+  <div class="admin-wrap" id="adminWrap" style="display:none;">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="logo.png" alt="Lxwyer Up" class="sb-logo" />
+        <div>
+          <div class="sb-name">Lxwyer Up</div>
+          <div class="sb-role">Admin Panel</div>
+        </div>
+      </div>
+      <nav class="sb-nav">
+        <button class="sb-link active" data-view="overview" onclick="switchView('overview', this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Overview
+        </button>
+        <button class="sb-link" data-view="users" onclick="switchView('users', this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          All Signups
+        </button>
+      </nav>
+      <div style="padding:16px 12px;">
+        <a href="https://www.linkedin.com/company/lxwyerup1" target="_blank" rel="noopener noreferrer" class="sb-link" style="color:#0a66c2;border:1px solid rgba(10,102,194,0.2);border-radius:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#0a66c2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+      </div>
+      <div class="sb-logout" onclick="logout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Logout
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+
+      <!-- ── Overview ── -->
+      <div class="view" id="view-overview">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Overview</h2>
+            <p class="page-sub">Early Access Program Dashboard</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-export" onclick="exportCSV()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              Export CSV
+            </button>
+            <button class="btn-refresh" onclick="loadData()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon stat-icon--blue">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-num" id="statTotal">—</div>
+              <div class="stat-label">Total Signups</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon--yellow">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-num" id="statPending">—</div>
+              <div class="stat-label">Pending Review</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon--green">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-num" id="statApproved">—</div>
+              <div class="stat-label">Approved</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon stat-icon--gold">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-num" id="statToday">—</div>
+              <div class="stat-label">Today's Signups</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spots remaining bar -->
+        <div class="overview-bar-section">
+          <div class="bar-section-header">
+            <span class="bar-section-title">Founding Spots Used</span>
+            <span class="bar-section-count" id="slotsUsed">0 / 500</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" id="slotsBarFill" style="width: 0%"></div>
+          </div>
+          <div class="bar-note" id="barNote">500 spots remaining</div>
+        </div>
+
+        <!-- Recent signups mini table -->
+        <div class="recent-section">
+          <div class="recent-header">
+            <h3 class="recent-title">Recent Signups</h3>
+            <button class="view-all-btn" onclick="switchView('users', document.querySelector('.sb-link[data-view=users]'))">
+              View all →
+            </button>
+          </div>
+          <table class="admin-table" id="recentTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>State / City</th>
+                <th>Cases</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="recentTableBody">
+              <tr><td colspan="6" class="table-empty">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── All Signups ── -->
+      <div class="view" id="view-users" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">All Signups</h2>
+            <p class="page-sub">Complete early access applications</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-export" onclick="exportCSV()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              Export CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-bar">
+          <div class="filter-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="searchInput" class="filter-input" placeholder="Search by name, email, city…" oninput="filterTable()" />
+          </div>
+          <select id="filterStatus" class="filter-select" onchange="filterTable()">
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <select id="filterPractice" class="filter-select" onchange="filterTable()">
+            <option value="">All Practice Areas</option>
+            <option value="criminal">Criminal Law</option>
+            <option value="civil">Civil Litigation</option>
+            <option value="corporate">Corporate & Commercial</option>
+            <option value="constitutional">Constitutional Law</option>
+            <option value="family">Family Law</option>
+            <option value="property">Property & Real Estate</option>
+            <option value="tax">Taxation</option>
+            <option value="labour">Labour & Employment</option>
+            <option value="intellectual_property">Intellectual Property</option>
+            <option value="arbitration">Arbitration & ADR</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="table-wrap">
+          <table class="admin-table full-table" id="fullTable">
+            <thead>
+              <tr>
+                <th>Mem #</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>State</th>
+                <th>City</th>
+                <th>Practice</th>
+                <th>Cases</th>
+                <th>Ref Code</th>
+                <th>Referrals Brought</th>
+                <th>Signed Up</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="fullTableBody">
+              <tr><td colspan="12" class="table-empty">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══ TOAST ═══════════════════════════════════════════ -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ═══ DETAIL MODAL ═════════════════════════════════════ -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script>
+    // Force cache-bust: inject admin.js dynamically
+    const s = document.createElement('script');
+    s.src = 'admin.js?v=' + Date.now();
+    document.body.appendChild(s);
+  </script>
+</body>
+</html>
