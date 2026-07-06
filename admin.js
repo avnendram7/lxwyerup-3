@@ -156,6 +156,11 @@ const practiceLabels = {
 
 function practiceLabel(val) { return practiceLabels[val] || val || '—'; }
 
+/* Detect demo users by isDemo flag OR email pattern */
+function isDemoUser(u) {
+  return u.isDemo === true || (u.email && u.email.endsWith('@lxwyerup.test'));
+}
+
 function formatDate(dateStr) {
   const d = new Date(dateStr);
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true });
@@ -183,7 +188,7 @@ function renderRecentTable() {
       <td>${escHtml(u.state || '')}${u.state && u.city ? ' / ' : ''}${escHtml(u.city || '—')}</td>
       <td>${escHtml(u.caseVolume || '—')}</td>
       <td>
-        ${u.isDemo ? '<span style="background:rgba(255,255,255,0.1);color:#fff;padding:2px 6px;border-radius:4px;font-size:11px;">Demo</span>' : '<span style="background:rgba(16,185,129,0.2);color:#10b981;padding:2px 6px;border-radius:4px;font-size:11px;">Real</span>'}
+        ${isDemoUser(u) ? '<span style="background:rgba(255,255,255,0.1);color:#fff;padding:2px 6px;border-radius:4px;font-size:11px;">Demo</span>' : '<span style="background:rgba(16,185,129,0.2);color:#10b981;padding:2px 6px;border-radius:4px;font-size:11px;">Real</span>'}
       </td>
       <td>${statusPill(u.status)}</td>
       <td>
@@ -230,7 +235,7 @@ function renderFullTable(users) {
       </td>
       <td class="cell-date">${formatDate(u.signupDate)}</td>
       <td>
-        ${u.isDemo ? '<span style="background:rgba(255,255,255,0.1);color:#fff;padding:2px 6px;border-radius:4px;font-size:11px;">Demo</span>' : '<span style="background:rgba(16,185,129,0.2);color:#10b981;padding:2px 6px;border-radius:4px;font-size:11px;">Real</span>'}
+        ${isDemoUser(u) ? '<span style="background:rgba(255,255,255,0.1);color:#fff;padding:2px 6px;border-radius:4px;font-size:11px;">Demo</span>' : '<span style="background:rgba(16,185,129,0.2);color:#10b981;padding:2px 6px;border-radius:4px;font-size:11px;">Real</span>'}
       </td>
       <td>${statusPill(u.status)}</td>
       <td>

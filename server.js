@@ -416,24 +416,20 @@ app.post('/api/signup', async (req, res) => {
 
   await insertSignup(newUser);
 
-  const host = req.hostname;
-  const isLocalhost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-
-  if (!isLocalhost) {
-    const mailer = getTransporter();
-    if (mailer) {
-      try {
-        await mailer.sendMail(buildConfirmationEmail(name, memberNumber, email));
-        console.log(`✅ Confirmation email → ${email}`);
-      } catch (err) {
-        console.error('Email error:', err.message);
-      }
+  // Send confirmation email whenever transporter is configured
+  const mailer = getTransporter();
+  if (mailer) {
+    try {
+      await mailer.sendMail(buildConfirmationEmail(name, memberNumber, email));
+      console.log(`✅ Confirmation email → ${email}`);
+    } catch (err) {
+      console.error('Email error:', err.message);
     }
   } else {
-    console.log(`🚫 Skipped confirmation email to ${email} (running on localhost)`);
+    console.log(`⚠️ No email transporter configured — skipped confirmation email to ${email}`);
   }
 
-  // Handle Referrer Rewards (always runs, regardless of localhost)
+  // Handle Referrer Rewards
   if (referredBy) {
     try {
       const referrer = await findSignupByReferralCode(referredBy);
@@ -452,19 +448,15 @@ app.post('/api/signup', async (req, res) => {
           await updateSignupById(referrer.id, { rewardTier });
           console.log(`🏆 Updated ${referrer.name} to rewardTier ${rewardTier}`);
 
-          // Send reward email only in production
-          if (!isLocalhost) {
-            const mailer = getTransporter();
-            if (mailer) {
-              try {
-                await mailer.sendMail(buildRewardEmail(referrer.name, currentCount, rewardName, referrer.email));
-                console.log(`🎁 Reward email sent to referrer ${referrer.email} for tier ${rewardTier}`);
-              } catch (emailErr) {
-                console.error('Reward email error:', emailErr.message);
-              }
+          // Send reward email
+          const rewardMailer = getTransporter();
+          if (rewardMailer) {
+            try {
+              await rewardMailer.sendMail(buildRewardEmail(referrer.name, currentCount, rewardName, referrer.email));
+              console.log(`🎁 Reward email sent to referrer ${referrer.email} for tier ${rewardTier}`);
+            } catch (emailErr) {
+              console.error('Reward email error:', emailErr.message);
             }
-          } else {
-            console.log(`🚫 Skipped reward email to ${referrer.email} (running on localhost)`);
           }
         }
       }
@@ -591,10 +583,9 @@ app.post('/api/admin/approve/:id', requireAdmin, async (req, res) => {
 
   await updateSignupById(req.params.id, { status: 'approved', approvedAt: new Date().toISOString() });
 
-  const host = req.hostname;
-  const isLocalhost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-
-  if (!isLocalhost && !user.isDemo) {
+  // Send welcome email for non-demo users whenever transporter is configured
+  const isDemo = user.isDemo === true || (user.email && user.email.endsWith('@lxwyerup.test'));
+  if (!isDemo) {
     const mailer = getTransporter();
     if (mailer) {
       try {
@@ -603,9 +594,11 @@ app.post('/api/admin/approve/:id', requireAdmin, async (req, res) => {
       } catch (err) {
         console.error('Welcome email error:', err.message);
       }
+    } else {
+      console.log(`⚠️ No email transporter configured — skipped welcome email to ${user.email}`);
     }
   } else {
-    console.log(`🚫 Skipped welcome email to ${user.email} (localhost or demo user)`);
+    console.log(`ℹ️ Skipped welcome email to ${user.email} (demo user)`);
   }
 
   res.json({ success: true, message: `${user.name} approved.` });
