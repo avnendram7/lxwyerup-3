@@ -83,6 +83,7 @@ void main(){
 `;
 
   // Configuration for DarkVeil
+  const isMobile = window.innerWidth <= 768;
   const config = {
     hueShift: 220,         // Shift toward blue
     noiseIntensity: 0.05,
@@ -90,11 +91,11 @@ void main(){
     speed: 0.5,
     scanlineFrequency: 150,
     warpAmount: 0.5,
-    resolutionScale: 1
+    resolutionScale: isMobile ? 0.4 : 1  // Half-res on mobile for perf
   };
 
   const renderer = new Renderer({
-    dpr: Math.min(window.devicePixelRatio, 2),
+    dpr: isMobile ? 1 : Math.min(window.devicePixelRatio, 2),  // Cap to 1x on mobile
     canvas
   });
 

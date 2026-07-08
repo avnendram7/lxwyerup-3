@@ -166,7 +166,7 @@ h1, h2, h3, h4 {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-color: #000;
+  background: radial-gradient(ellipse at 50% 40%, #0a1628 0%, #060e1a 35%, #000000 70%);
 }
 
 /* DarkVeil Canvas */
@@ -238,7 +238,7 @@ h1, h2, h3, h4 {
 .hero-body {
   font-size: 1.125rem;
   color: var(--text-muted);
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .hero-actions {
@@ -831,24 +831,34 @@ h1, h2, h3, h4 {
 /* ── Hero mobile ── */
 @media (max-width: 768px) {
   .hero {
-    padding-top: 120px;
-    padding-bottom: 80px;
-    min-height: unset;
+    padding-top: 100px;
+    padding-bottom: 48px;
+    min-height: 100dvh; /* Fill exactly the phone screen — no leaking */
+    min-height: 100vh;  /* Fallback for older browsers */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .hero-content {
     padding: 0 20px;
     text-align: center;
+    width: 100%;
   }
   .hero-eyebrow { justify-content: center; }
   .hero-title {
     font-size: 2.5rem;
     letter-spacing: -0.04em;
   }
-  .hero-subtitle { font-size: 1.05rem; }
-  .hero-body { font-size: 1rem; }
+  .hero-body { font-size: 1rem; margin-bottom: 24px; }
   .hero-actions { align-items: center; }
   .btn-primary { width: 100%; max-width: 320px; justify-content: center; font-size: 0.9375rem; }
   .spots-pill { margin: 0 auto; }
+
+  /* Reduce bottom blur bar on mobile */
+  .gradual-blur-fixed { height: 4rem !important; }
+
+  /* Hide chatbot tooltip on mobile */
+  .chatbot-tooltip { display: none !important; }
 }
 
 @media (max-width: 430px) {
@@ -1407,4 +1417,9 @@ h1, h2, h3, h4 {
 }
 .ticker-item {
   transition: opacity 0.3s ease;
+}
+
+/* ─── Blur bar default height ─── */
+.gradual-blur-fixed {
+  height: 8rem;
 }
