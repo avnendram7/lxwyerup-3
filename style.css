@@ -169,6 +169,7 @@ h1, h2, h3, h4 {
   background: radial-gradient(ellipse at 50% 40%, #0a1628 0%, #060e1a 35%, #000000 70%);
 }
 
+
 /* DarkVeil Canvas */
 #darkveil-canvas {
   position: absolute;
@@ -606,45 +607,165 @@ h1, h2, h3, h4 {
 .btn-submit:hover { opacity: 0.9; }
 .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* ─── FAQ Section ─── */
+.faq-section {
+  padding: 80px 0;
+}
+
+.faq-grid {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-item {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.faq-item:hover {
+  border-color: var(--border-hover);
+}
+
+.faq-item[open] {
+  border-color: var(--accent);
+  background: rgba(37, 99, 235, 0.03);
+}
+
+.faq-question {
+  padding: 20px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-main);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: color var(--transition);
+  user-select: none;
+}
+
+.faq-question::-webkit-details-marker { display: none; }
+
+.faq-question::after {
+  content: '+';
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  transition: transform 0.3s ease, color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.faq-item[open] .faq-question::after {
+  content: '−';
+  color: var(--accent);
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  padding: 0 24px 20px 24px;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
 /* ─── Footer ─── */
 .footer {
   padding: 60px 0;
   border-top: 1px solid var(--border-color);
 }
 
-.footer-inner {
+.footer-top {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  gap: 48px;
   margin-bottom: 40px;
+}
+
+.footer-brand-col {
+  max-width: 320px;
 }
 
 .footer-brand {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 12px;
 }
 
 .footer-logo {
-  width: 20px;
-  height: 20px;
-  opacity: 0.5;
+  width: 24px;
+  height: 24px;
+  opacity: 0.7;
 }
 
 .footer-name {
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--text-main);
 }
 
-.footer-links {
+.footer-tagline {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.footer-social {
   display: flex;
-  gap: 24px;
+  gap: 12px;
+}
+
+.footer-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  transition: all var(--transition);
+}
+
+.footer-social-link:hover {
+  color: var(--text-main);
+  border-color: var(--border-hover);
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+}
+
+.footer-nav-col {
+  display: flex;
+  gap: 48px;
+}
+
+.footer-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-nav-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
 }
 
 .footer-link {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--text-muted);
+  text-decoration: none;
   transition: color var(--transition);
 }
 
@@ -659,8 +780,14 @@ h1, h2, h3, h4 {
   padding-top: 24px;
 }
 
+@media (max-width: 768px) {
+  .footer-top { flex-direction: column; gap: 32px; }
+  .footer-brand-col { max-width: 100%; }
+  .footer-nav-col { gap: 32px; }
+}
+
 @media (max-width: 600px) {
-  .footer-inner { flex-direction: column; gap: 24px; align-items: flex-start; }
+  .footer-nav-col { flex-direction: column; gap: 24px; }
   .footer-bottom { flex-direction: column; gap: 12px; }
 }
 
@@ -859,6 +986,9 @@ h1, h2, h3, h4 {
 
   /* Hide chatbot tooltip on mobile */
   .chatbot-tooltip { display: none !important; }
+
+  /* Option C: Hide product preview on mobile entirely */
+  .product-peek { display: none !important; }
 }
 
 @media (max-width: 430px) {
@@ -944,14 +1074,13 @@ h1, h2, h3, h4 {
 
 /* ── Footer mobile ── */
 @media (max-width: 768px) {
-  .footer-inner {
+  .footer-top {
     flex-direction: column;
-    gap: 24px;
-    align-items: flex-start;
+    gap: 32px;
   }
-  .footer-links {
+  .footer-nav-col {
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 32px;
   }
   .footer-bottom {
     flex-direction: column;
